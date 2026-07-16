@@ -58,7 +58,7 @@ def read_parties(spark, env, enable_hive, hive_db):
 
 
 def read_address(spark, env, enable_hive, hive_db):
-    runtime_filter = ConfigLoader.get_data_filter(env, "adress.filter")
+    runtime_filter = ConfigLoader.get_data_filter(env, "address.filter")
     # this will true in QA & PROD environment
     if enable_hive:
         return spark.sql("select * from " + hive_db + ".party_address").where(

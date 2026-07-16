@@ -1,6 +1,13 @@
 import sys
 import uuid
+import os
 
+# Below configuration is for local environment: to explicitly notify Java Spark workers to spin up Python workers locally
+
+"""
+os.environ["PYSPARK_PYTHON"] = sys.executable
+os.environ["PYSPARK_DRIVER_PYTHON"] = sys.executable
+"""
 from pyspark.sql.functions import struct, col, to_json
 
 from lib import ConfigLoader, Utils, DataLoader, Transformations
@@ -50,7 +57,7 @@ if __name__ == "__main__":
     final_df = Transformations.apply_header(spark, data_df)
     logger.info("Preparing to send data to Kafka")
     kafka_kv_df = final_df.select(
-        col("payload.contractIdentifier.newValue").alias("key"),
+        col("payload.contractIdentifier.newValue").cast("string").alias("key"),
         to_json(struct("*")).alias("value"),
     )
     input("Press Any Key")
