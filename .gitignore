@@ -1,0 +1,7 @@
+/workspaace.xml
+.idea/*
+lib/__pycache__/*
+.vscode/
+.pytest_cache/
+__pycache__
+conf/*
