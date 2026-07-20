@@ -7,4 +7,23 @@ Welcome to the PySpark: Data Transformation project repository. This project cov
 ## 📌 Project Overview
 this project focuses on:
 - **The end-to-end data processing** - Data Extraction, Transformation and Load (ETL) via Apache Spark
-- **Modular programming practices** - 
+- **Modular programming practices** - Breaking huge line of codes as a single, separate functions for easier debugging and unit testing
+- **CI/CD** - Introductory of GitHub as a version control tool and high level overview of how automated CI/CD works behind the scene
+
+## 📑 Project Background
+### A. Introduction
+You are working in a multinational banking company as  data engineer. The Chief Data Officer (CDO) sent an email to the entire data & analytics team saying that the board executives are planning to implement a new approach of handling data transfer between Master Data Management (MDM) to the downstream systems. 
+
+Currently, data moves from MDM to downstream systems via customized APIs. As recent tech moves rapidly where data are now able to be processed in petabytes as well as the emergence of new analytics and machine learning tools, the downstream users are now able to analyze data in faster rate. 
+
+Moreover, the increase of data demand from the newly developed downstream systems penalized the performance of the current data pipelines. Thus, making the legacy architecture un-scalable.
+
+### A. System Architecture
+
+<img width="3036" height="1408" alt="MDM Architecture" src="https://github.com/user-attachments/assets/f1d25e46-65e1-4130-bb88-f716120f3e67" />
+<br>
+
+
+
+
+
