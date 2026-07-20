@@ -49,10 +49,49 @@ The reason behind the decision is as follow:
 6. Estimate and optimize Spark computation requirements.
 
 ## Project Requirements and Resources
-#### 1. [Project Milestone & Guidelines](https://app.notion.com/p/PySpark-Transforming-Data-From-Hive-Distributed-Warehouse-To-Kafka-Events-Format-39a7d7cd41a6809eae92e3886cdb6754?source=copy_link) 
-A comprehensive checkpoint in a project timeline that marks a major event, phase completion, or key deliverables.
+#### 1. [Project Milestone & Guidelines](https://app.notion.com/p/PySpark-Transforming-Data-From-Hive-Distributed-Warehouse-To-Kafka-Events-Format-39a7d7cd41a6809eae92e3886cdb6754?source=copy_link) - A comprehensive checkpoint in a project timeline that marks a major event, phase completion, or key deliverables.
 
 #### 2. Repository Structure
-Clear file and folder structure that follows modular design, isolation and breaking large complex code into a small function unit.
+```bash
+MDM_Spark_Project/
+├── conf/
+│   ├── sbdl.conf             # Application-level configurations (paths, tables, parameters)
+│   └── spark.conf            # Spark Session parameters and executor properties
+├── lib/
+│   ├── __init__.py
+│   ├── ConfigLoader.py       # Helper for loading runtime and environment configs
+│   ├── DataLoader.py         # Data reader logic for source data ingestion
+│   ├── Transformations.py    # Core PySpark business logic & schema transformations
+│   ├── Utils.py              # Spark Session builder and utility functions
+│   └── logger.py             # Custom Python logger wrapper for tracking ETL execution
+├── test_data/
+│   ├── accounts/
+│   │   └── account_samples.csv
+│   ├── parties/
+│   │   └── party_samples.csv
+│   ├── party_address/
+│   │   └── address_samples.csv
+│   └── results/
+│       └── final_df.json     # Expected execution output for local verification
+├── .env                      # Local environment variable definitions
+├── .gitignore                # Excludes cache, logs, and OS system files
+├── Jenkinsfile               # Automated CI/CD build & deployment pipeline
+├── Pipfile                   # Pipenv environment specifications
+├── Pipfile.lock              # Explicit package dependency versions
+├── ReadMe.md                 # Project README for documentation
+├── log4j.properties          # Apache Spark logging configuration
+├── sbdl_main.py              # Main driver script / entry point
+├── sbdl_submit.sh            # Production spark-submit bash wrapper script
+└── test_pytest_sbdl.py       # PyTest suite for data transformation unit tests
+
+----
+
+## Key Components
+sbdl_main.py: Entry point for running the PySpark pipeline.
+lib/: Modular Python packages containing re-usable PySpark logic, data loaders, and configuration handlers.
+conf/: Decoupled config files separating application-level parameters from Spark cluster settings.
+test_data/: Sample inputs and output schemas for automated local testing and PyTest validation ('test pytest_sbdl.py').
+sbdl submit.sh & Jenkinsfile: Shell script and CI/CD pipeline definitions for automated deployment and cluster execution via spark-submit`.
+```
 
 ### 3. 
