@@ -12,23 +12,36 @@ this project focuses on:
 
 ## 📑 Project Background
 ### A. Problem Statement
-You are working in a multinational banking company as  data engineer. The Chief Data Officer (CDO) sent an email to the entire data & analytics team saying that the board executives are planning to implement a new approach of handling data transfer between Master Data Management (MDM) to the downstream systems. 
+You are working in a multinational company as  data engineer. The Chief Data Officer (CDO) sent an email to the entire data & analytics team saying that the board executives are planning to implement a new approach of handling data transfer between Master Data Management (MDM) to the downstream systems. During the meeting with the leaders, you learned that the organization is looking for the opportunity to integrate Confluent Kafka as a bridge between the MDM and the downstream systems.
 
-Currently, data moves from MDM to downstream systems via customized APIs. As recent tech moves rapidly where data are now able to be processed in petabytes as well as the emergence of new analytics and machine learning tools, the downstream users are now able to analyze data in faster rate. 
-
-Moreover, the increase of data demand from the newly developed downstream systems penalized the performance of the current data pipelines. Thus, making the legacy architecture un-scalable.
+The reason behind the decision is as follow:
+- Currently, data moves from MDM to downstream systems via customized APIs. As recent tech moves rapidly where data are now able to be processed in petabytes as well as the emergence of new analytics and machine learning tools, the downstream users are now able to analyze data in lightning faster rate. 
+- Moreover, the increase of data demand from the newly developed downstream systems penalized the performance of the current data pipelines. Thus, making the legacy architecture un-scalable.
 
 ### B. System Architecture
-
+**Legacy Architecture**
+<br><br>
 <img width="3036" height="1408" alt="MDM Architecture" src="https://github.com/user-attachments/assets/f1d25e46-65e1-4130-bb88-f716120f3e67" />
 <br>
 
-1. The MDM platform acts as the single source of repository, where it clones all the transformed transactional data across all line of businesses (LOB) in the organization. 
-2. The MDM is managed by a different data engineering team which is out of our team scope.
-3. Initially, our team developed custom internal API to fetch data from MDM and feed the data to the downstream system such as customer churn, fraud detection, compliance & risks.
-4. The legacy workflow unable to scale with the demand of data requested from the downstream system where the custom API could not handle multi parallel requests in gigabytes simultaneously.
-5. Additinally, the legacy workflow also requires expertise in tweaking and adjusting the custom APIs if there is any changes of data structures or schemas from the MDM platform. This led to complexity in tracking the changes as well as ensuring readability of the scripts.
+1. The MDM platform acts as the single source of repository, where it clones all the transformed transactional data across all line of businesses (LOB) in the organization.
+2. Amazon S3 is used to host the MDM platform.
+3. The MDM team built thousands of granular security policies inside Apache Ranger or Sentry. These policies are tightly coupled to S3 Apache Hive Metastore (HMS). 
+4. The MDM is managed by a different data team which is out of our team scope.
+5. Initially, our team developed custom internal API to fetch data from MDM and feed the data to the downstream system such as customer churn, fraud detection, compliance & risks.
+6. The legacy workflow unable to scale with the demand of data requested from the downstream system where the custom API could not handle multi parallel requests in gigabytes simultaneously.
+7. Additinally, the legacy workflow also requires expertise in tweaking and adjusting the custom APIs if there is any changes of data structures or schemas from the MDM platform. This led to complexity in tracking the changes as well as ensuring readability of the scripts.
 
+### C. Desired Output
+1. New connection pipeline that leverage Confluent Kafka as a bridge to move data from MDM to downstream systems.
+2. To leverage the maximum throughput of Confluent kafka, data from MDM needs to be transform to a key value pair with a custome json-like format as a Kafka events.
+3. The organization is looking for an implementation of Apache Spark as the transformation tool.
+
+### D. Objectives
+1. You are assigned to develop Apache kafka scripts to transform the data from MDM based on specific rquirements for each downstream system and load to Confluent kafka.
+2. Ensure readability and modular programming methodolodies are implemented.
+3. Spark scripts need to be developed locally via any preferable IDEs i.e. PyCharm, VSC.
+4. 
 
 
 
