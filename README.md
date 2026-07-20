@@ -24,11 +24,11 @@ The reason behind the decision is as follow:
 <img width="3036" height="1408" alt="MDM Architecture" src="https://github.com/user-attachments/assets/f1d25e46-65e1-4130-bb88-f716120f3e67" />
 <br><br>
 
-1. The MDM platform acts as the single source of repository, where it clones all the transformed transactional data across all line of businesses (LOB) in the organization.
+1. The MDM platform acts as the central data management platform, where it designed to synchronize all the transformed transactional data across all line of businesses (LOB) in the organization.
 2. Amazon S3 is used to host the MDM platform.
 3. The MDM team built thousands of granular security policies inside Apache Ranger or Sentry. These policies are tightly coupled to S3 Apache Hive Metastore (HMS). 
 4. The MDM is managed by a different data team which is out of our team scope.
-5. Initially, our team developed custom internal API to fetch data from MDM and feed the data to the downstream system such as customer churn, fraud detection, compliance & risks.
+5. The MDM system exposes custom internal API to fetch data from MDM and feed the data to the downstream system such as customer churn, fraud detection, compliance & risks.
 6. The legacy workflow unable to scale with the demand of data requested from the downstream system where the custom API could not handle multi parallel requests in gigabytes simultaneously.
 7. Additinally, the legacy workflow also requires expertise in tweaking and adjusting the custom APIs if there is any changes of data structures or schemas from the MDM platform. This led to complexity in tracking the changes as well as ensuring readability of the scripts.
 
@@ -49,9 +49,9 @@ The reason behind the decision is as follow:
 6. Estimate and optimize Spark computation requirements.
 
 ## Project Requirements and Resources
-#### 1. [Project Milestone & Guidelines](https://app.notion.com/p/PySpark-Transforming-Data-From-Hive-Distributed-Warehouse-To-Kafka-Events-Format-39a7d7cd41a6809eae92e3886cdb6754?source=copy_link) - A comprehensive checkpoint in a project timeline that marks a major event, phase completion, or key deliverables.
+#### **1. [Project Milestone & Guidelines](https://app.notion.com/p/PySpark-Transforming-Data-From-Hive-Distributed-Warehouse-To-Kafka-Events-Format-39a7d7cd41a6809eae92e3886cdb6754?source=copy_link)** - A comprehensive checkpoint in a project timeline that marks a major event, phase completion, or key deliverables.
 
-#### 2. Repository Structure
+#### 2. Project File Structure - Modular code separation isolating ETL operations, business logic, session management, and configuration loading.
 ```bash
 MDM_Spark_Project/
 ├── conf/
@@ -87,11 +87,11 @@ MDM_Spark_Project/
 ----
 
 ## Key Components
-sbdl_main.py: Entry point for running the PySpark pipeline.
-lib/: Modular Python packages containing re-usable PySpark logic, data loaders, and configuration handlers.
-conf/: Decoupled config files separating application-level parameters from Spark cluster settings.
-test_data/: Sample inputs and output schemas for automated local testing and PyTest validation ('test pytest_sbdl.py').
-sbdl submit.sh & Jenkinsfile: Shell script and CI/CD pipeline definitions for automated deployment and cluster execution via spark-submit`.
+# sbdl_main.py: Entry point for running the PySpark pipeline.
+# lib/: Modular Python packages containing re-usable PySpark logic, data loaders, and configuration handlers.
+# conf/: Decoupled config files separating application-level parameters from Spark cluster settings.
+# test_data/: Sample inputs and output schemas for automated local testing and PyTest validation ('test pytest_sbdl.py').
+# sbdl submit.sh & Jenkinsfile: Shell script and CI/CD pipeline definitions for automated deployment and cluster execution via spark-submit`.
 ```
 
 ### 3. 
