@@ -22,7 +22,7 @@ The reason behind the decision is as follow:
 **Legacy Architecture**
 <br><br>
 <img width="3036" height="1408" alt="MDM Architecture" src="https://github.com/user-attachments/assets/f1d25e46-65e1-4130-bb88-f716120f3e67" />
-<br>
+<br><br>
 
 1. The MDM platform acts as the single source of repository, where it clones all the transformed transactional data across all line of businesses (LOB) in the organization.
 2. Amazon S3 is used to host the MDM platform.
@@ -33,15 +33,19 @@ The reason behind the decision is as follow:
 7. Additinally, the legacy workflow also requires expertise in tweaking and adjusting the custom APIs if there is any changes of data structures or schemas from the MDM platform. This led to complexity in tracking the changes as well as ensuring readability of the scripts.
 
 ### C. Desired Output
+<img width="3184" height="1344" alt="Kafka connection" src="https://github.com/user-attachments/assets/31e033a8-89b3-46d2-93f8-85ada4858194" />
+<br><br>
+
 1. New connection pipeline that leverage Confluent Kafka as a bridge to move data from MDM to downstream systems.
 2. To leverage the maximum throughput of Confluent kafka, data from MDM needs to be transform to a key value pair with a custome json-like format as a Kafka events.
-3. The organization is looking for an implementation of Apache Spark as the transformation tool.
+3. The organization is looking for an implementation of Apache Spark as the transformation tool. Apache spark will be hosted in Amazon EMR.
 
 ### D. Objectives
-1. You are assigned to develop Apache kafka scripts to transform the data from MDM based on specific rquirements for each downstream system and load to Confluent kafka.
+1. Develop Apache kafka scripts to transform the data from MDM based on specific rquirements for each downstream system and load to Confluent kafka.
 2. Ensure readability and modular programming methodolodies are implemented.
 3. Spark scripts need to be developed locally via any preferable IDEs i.e. PyCharm, VSC.
-4. 
+4. Unit testing is done locally in machine during the building/developmental stage to avoid any compute cost consumption.
+5. Anonymized Production Snapshots (data sample) that has been sanitized/masked to comply with privacy regulations (like GDPR or HIPAA) will be provided every month.
 
 
 
