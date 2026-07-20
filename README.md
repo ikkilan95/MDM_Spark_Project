@@ -2,7 +2,7 @@
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![Apache Spark](https://img.shields.io/badge/Apache%20Spark-FDEE21?style=for-the-badge&logo=apachespark&logoColor=black) ![Apache Kafka](https://img.shields.io/badge/Apache%20Kafka-000?style=for-the-badge&logo=apachekafka) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
 
-Welcome to the PySpark: Data Transformation project repository. This project covers end-to-end ETL processes; ingesting data from a source, tranforming via Apache Spark and load to target destination. Designed as a portfolio project, it highlights production-grade best practices in data engineering field.
+Welcome to the PySpark: Data Transformation project repository. This project covers end-to-end ETL processes; ingesting data from a source, tranforming via Apache Spark and load to target destination and optimizing Spark compute requirements based on size of data being process. Designed as a portfolio project, it highlights production-grade best practices in data engineering field.
 
 ## 📌 Project Overview
 this project focuses on:
@@ -46,6 +46,8 @@ The reason behind the decision is as follow:
 3. Spark scripts need to be developed locally via any preferable IDEs i.e. PyCharm, VSC.
 4. Unit testing is done locally in machine during the building/developmental stage to avoid any compute cost consumption.
 5. Anonymized Production Snapshots (data sample) that has been sanitized/masked to comply with privacy regulations (like GDPR or HIPAA) will be provided every month.
+6. Estimate and optimize Spark computation requirements.
 
-
-
+## Project Requirements and Resources
+1. [Project Milestone](https://app.notion.com/p/PySpark-Transforming-Data-From-Hive-Distributed-Warehouse-To-Kafka-Events-Format-39a7d7cd41a6809eae92e3886cdb6754?source=copy_link) - A comprehensive checkpoint in a project timeline that marks a major event, phase completion, or key deliverables.
+2. 
