@@ -49,7 +49,7 @@ The reason behind the decision is as follow:
 6. Estimate and optimize Spark computation requirements.
 
 ## Project Requirements and Resources
-#### 1. [Project Milestone](https://app.notion.com/p/PySpark-Transforming-Data-From-Hive-Distributed-Warehouse-To-Kafka-Events-Format-39a7d7cd41a6809eae92e3886cdb6754?source=copy_link) 
+#### 1. [Project Milestone & Guidelines](https://app.notion.com/p/PySpark-Transforming-Data-From-Hive-Distributed-Warehouse-To-Kafka-Events-Format-39a7d7cd41a6809eae92e3886cdb6754?source=copy_link) 
 A comprehensive checkpoint in a project timeline that marks a major event, phase completion, or key deliverables.
 
 #### 2. Repository Structure
