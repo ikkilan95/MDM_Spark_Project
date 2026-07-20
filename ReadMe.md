@@ -11,18 +11,23 @@ this project focuses on:
 - **CI/CD** - Introductory of GitHub as a version control tool and high level overview of how automated CI/CD works behind the scene
 
 ## 📑 Project Background
-### A. Introduction
+### A. Problem Statement
 You are working in a multinational banking company as  data engineer. The Chief Data Officer (CDO) sent an email to the entire data & analytics team saying that the board executives are planning to implement a new approach of handling data transfer between Master Data Management (MDM) to the downstream systems. 
 
 Currently, data moves from MDM to downstream systems via customized APIs. As recent tech moves rapidly where data are now able to be processed in petabytes as well as the emergence of new analytics and machine learning tools, the downstream users are now able to analyze data in faster rate. 
 
 Moreover, the increase of data demand from the newly developed downstream systems penalized the performance of the current data pipelines. Thus, making the legacy architecture un-scalable.
 
-### A. System Architecture
+### B. System Architecture
 
 <img width="3036" height="1408" alt="MDM Architecture" src="https://github.com/user-attachments/assets/f1d25e46-65e1-4130-bb88-f716120f3e67" />
 <br>
 
+1. The MDM platform acts as the single source of repository, where it clones all the transformed transactional data across all line of businesses (LOB) in the organization. 
+2. The MDM is managed by a different data engineering team which is out of our team scope.
+3. Initially, our team developed custom internal API to fetch data from MDM and feed the data to the downstream system such as customer churn, fraud detection, compliance & risks.
+4. The legacy workflow unable to scale with the demand of data requested from the downstream system where the custom API could not handle multi parallel requests in gigabytes simultaneously.
+5. Additinally, the legacy workflow also requires expertise in tweaking and adjusting the custom APIs if there is any changes of data structures or schemas from the MDM platform. This led to complexity in tracking the changes as well as ensuring readability of the scripts.
 
 
 
