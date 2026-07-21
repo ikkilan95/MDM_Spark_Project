@@ -113,7 +113,7 @@ MDM_Spark_Project/
 This project requires to build branches of repository layers to mimicks the actual working scenarios where data engineers work solely in their respective development-stage repo. Data engineers are expected to run unit testing locally before requesting a merge to the development stage. In real working scenarios, we can expect to have CI/CD automation which will auto merge the project repo to the next level of branches without needing to have human intervention.
 The branch is as follow:
 
-```bash
+```txt
                           master
                             ^
                             |
@@ -130,7 +130,7 @@ The branch is as follow:
 #### Automated CI/CD
 In real working scenarios, DevOps implement automated CI/CD by adopting automation tools such as Jenkins, GitHub Actions or GitLab CI/CD. Data engineers do not build this automation tools. Instead, data engineers will somehow tweak the automation scripts depending on the requirements or applications that they build. In most times, DevOps develop the script to align with the desired outcomes or testing results and data engineers must ensure that their files, folders and scripts align with the pre-defined Jenkinsfile script. This project assumes that Jenkins is used as the CI/CD automation tool and therefore the creation of Jenkinsfile.
 
-```bash
+```Jenkinsfile
 pipeline {
     agent any
 
@@ -170,8 +170,116 @@ This project requires connection to the source (MDM hosted in S3 with the integr
 
 # Input & Ouput 
 
-### A. Input format
-The MDM is stored in Amazon S3 where HIVE is integrated to create the metadata. Thus, Spark able to read the 
+### A. Data Source Format
+The MDM is stored in Amazon S3 where HIVE is integrated to build the metadata for the data stored in S3. Thus, Spark able to read the source via table format, querying the data via SparkSQL. 
+
+**Source Input Sample**
+
+Accounts Table
+
+<img width="1350" height="393" alt="image" src="https://github.com/user-attachments/assets/a0b9d6b7-f1dd-4bff-93f2-bc0ad95c4df8" />
+<br>
+
+Party Table
+
+<img width="664" height="466" alt="image" src="https://github.com/user-attachments/assets/edeb90f1-9767-4126-ad55-1dde9f630aa7" />
+<br>
+
+Party Address Table
+
+<img width="1151" height="387" alt="image" src="https://github.com/user-attachments/assets/59ff956f-a925-4b2f-b082-68e958e28535" />
+
+
+### B. Sink Format
+Data ingested from source was then transformed into a complex JSON key value pair format before sinking it to Confluent Kafka. The sample output of the transformation is as follow:
+
+```JSON
+{
+  "eventHeader": {
+    "eventIdentifier": "c361a145-d2fc-434e-a608-9688caa6d22e",
+    "eventType": "SBDL-Contract",
+    "majorSchemaVersion": 1,
+    "minorSchemaVersion": 0,
+    "eventDateTime": "2022-09-06T20:49:03+0530"
+  },
+  "keys": [
+    {
+      "keyField": "contractIdentifier",
+      "keyValue": "6982391060"
+    }
+  ],
+  "payload": {
+    "contractIdentifier": {
+      "operation": "INSERT",
+      "newValue": "6982391060"
+    },
+    "sourceSystemIdentifier": {
+      "operation": "INSERT",
+      "newValue": "COH"
+    },
+    "contactStartDateTime": {
+      "operation": "INSERT",
+      "newValue": "2018-03-24T13:56:45.000+05:30"
+    },
+    "contractTitle": {
+      "operation": "INSERT",
+      "newValue": [
+        {
+          "contractTitleLineType": "lgl_ttl_ln_1",
+          "contractTitleLine": "Tiffany Riley"
+        },
+        {
+          "contractTitleLineType": "lgl_ttl_ln_2",
+          "contractTitleLine": "Matthew Davies"
+        }
+      ]
+    },
+    "taxIdentifier": {
+      "operation": "INSERT",
+      "newValue": {
+        "taxIdType": "EIN",
+        "taxId": "ZLCK91795330413525"
+      }
+    },
+    "contractBranchCode": {
+      "operation": "INSERT",
+      "newValue": "ACXMGBA5"
+    },
+    "contractCountry": {
+      "operation": "INSERT",
+      "newValue": "Mexico"
+    },
+    "partyRelations": [
+      {
+        "partyIdentifier": {
+          "operation": "INSERT",
+          "newValue": "9823462810"
+        },
+        "partyRelationshipType": {
+          "operation": "INSERT",
+          "newValue": "F-N"
+        },
+        "partyRelationStartDateTime": {
+          "operation": "INSERT",
+          "newValue": "2019-07-29T06:21:32.000+05:30"
+        },
+        "partyAddress": {
+          "operation": "INSERT",
+          "newValue": {
+            "addressLine1": "45229 Drake Route",
+            "addressLine2": "13306 Corey Point",
+            "addressCity": "Shanefort",
+            "addressPostalCode": "77163",
+            "addressCountry": "Canada",
+            "addressStartDate": "2019-02-26"
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
 
 
 
