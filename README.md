@@ -7,6 +7,7 @@ Welcome to the PySpark: Data Transformation project repository. This project cov
 ## 📌 Project Overview
 this project focuses on:
 - **The end-to-end data processing** - Data Extraction, Transformation and Load (ETL) via Apache Spark
+- **Spark complex transformation** - Data transformation that requires the format of data to follow custom JSON key value pairs. This require complex nested format where struct() and array() are implemented in the transformations script.
 - **Modular programming practices** - Breaking huge line of codes as a single, separate functions for easier debugging and unit testing
 - **CI/CD** - Introductory of GitHub as a version control tool and high level overview of how automated CI/CD works behind the scene
 
@@ -50,19 +51,20 @@ The reason behind the decision is as follow:
 
 ## Project Requirements and Resources
 
-### Stack
+#### Stack
 1. Apache Spark - Installed in machine
 2. Java - Installed in machine (compatible with the Spark version)
 3. Python - Installde in machine (compatible with the Spark version)
 4. Confluent Kafka - As an endpoint / sink destination
 5. Amazon S3 - Storage
-6. Apache HIVE OR AWS Glue Catalog - For metadata creation
+6. Apache HIVE / AWS Glue Catalog - For metadata creation of the data stored in S3
+7. IDE - optional
 
-#### [Project Milestone & Guidelines](https://app.notion.com/p/PySpark-Transforming-Data-From-Hive-Distributed-Warehouse-To-Kafka-Events-Format-39a7d7cd41a6809eae92e3886cdb6754?source=copy_link)
+##### [Project Milestone & Guidelines](https://app.notion.com/p/PySpark-Transforming-Data-From-Hive-Distributed-Warehouse-To-Kafka-Events-Format-39a7d7cd41a6809eae92e3886cdb6754?source=copy_link)
 A comprehensive checkpoint in a project timeline that marks a major event, phase completion, or key deliverables.
 <br><br>
 
-#### Project File Structure 
+##### Project File Structure 
 Modular code separation isolating ETL operations, business logic, session management, and configuration loading.
 ```bash
 MDM_Spark_Project/
@@ -107,7 +109,7 @@ MDM_Spark_Project/
 ```
 <br>
 
-### Version Control
+#### Version Control
 This project requires to build branches of repository layers to mimicks the actual working scenarios where data engineers work solely in their respective development-stage repo. Data engineers are expected to run unit testing locally before requesting a merge to the development stage. In real working scenarios, we can expect to have CI/CD automation which will auto merge the project repo to the next level of branches without needing to have human intervention.
 The branch is as follow:
 
@@ -125,7 +127,7 @@ The branch is as follow:
 ```
 <br>
 
-### Automated CI/CD
+#### Automated CI/CD
 In real working scenarios, DevOps implement automated CI/CD by adopting automation tools such as Jenkins, GitHub Actions or GitLab CI/CD. Data engineers do not build this automation tools. Instead, data engineers will somehow tweak the automation scripts depending on the requirements or applications that they build. In most times, DevOps develop the script to align with the desired outcomes or testing results and data engineers must ensure that their files, folders and scripts align with the pre-defined Jenkinsfile script. This project assumes that Jenkins is used as the CI/CD automation tool and therefore the creation of Jenkinsfile.
 
 ```bash
@@ -163,7 +165,7 @@ pipeline {
 ```
 <br>
 
-### Password And Credentials
+#### Password And Credentials
 This project requires connection to the source (MDM hosted in S3 with the integration of Apache HIVE) and also the target destination (Confluent Kafka). In common cases where ETL decelopment are done in company-managed environment, data engineers are provided with pre-defined scripts that are already built in the project repositories (depending on the company size). You are rarely to develop your own config files from scratch. To mimic real working scenarios, this project requires building config files and store the credentials on a separate file where it will be passed automatically during the reading of the environment, programmatic fetching at runtime or native integration with orchestrators & park (i.e. Databricks or native Apache Spark config). Locally, the credentials are stored in .env where it will be included in .gitignore.
 
 
