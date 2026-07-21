@@ -37,16 +37,18 @@ The reason behind the decision is as follow:
 <img width="3184" height="1344" alt="desired output" src="https://github.com/user-attachments/assets/b09f2532-c65b-47f9-869d-bb26da9d43fb" />
 <br><br>
 
-1. New connection pipeline that leverage Confluent Kafka as a bridge to move data from MDM to downstream systems.
-2. To leverage the maximum throughput of Confluent kafka, data from MDM needs to be transform to a key value pair with a custome json-like format as a Kafka events.
-3. The organization is looking for an implementation of Apache Spark as the transformation tool. Apache spark will be hosted in Amazon EMR.
+1. Maintain the architecture of the source system where MDM data is hosted in S3, integrated with Apache HIVE.
+2. Since the MDM has already integrated with Apache HIVE, we can read the data easily with the Apache Spark read.table method for transformations.
+3. To leverage the maximum throughput of Confluent kafka, data from MDM needs to be transform to a key value pair with a custome json-like format as a Kafka events.
+4. The organization is looking for an implementation of Apache Spark as the transformation tool. Apache spark will be hosted in Amazon EMR.
+5. The requirement does not ask us to build a real-time stream data. Instead, the pipeline will be running once a day to Kafka.
 
 ### D. Objectives
 1. Develop Apache kafka scripts to transform the data from MDM based on specific rquirements for each downstream system and load to Confluent kafka.
-2. Ensure readability and modular programming methodolodies are implemented.
+2. Ensure readability and modular programming design methodolodies are implemented.
 3. Spark scripts need to be developed locally via any preferable IDEs i.e. PyCharm, VSC.
 4. Unit testing is done locally in machine during the building/developmental stage to avoid any compute cost consumption.
-5. Anonymized Production Snapshots (data sample) that has been sanitized/masked to comply with privacy regulations (like GDPR or HIPAA) will be provided every month.
+5. The system will be batch dataflow pipeline that will be running once a day. (Depending on the requirements, you may need to run the pipeline hourly).
 6. Estimate and optimize Spark computation requirements.
 
 ## Project Requirements and Resources
@@ -279,6 +281,62 @@ Data ingested from source was then transformed into a complex JSON key value pai
   }
 }
 ```
+
+# Spark Resource Requirements
+Before we start discussing the resouces required for Spark in order to achieve optimum throughput while minimizing the cost, lets understand the architecture of Spark.
+<br>
+
+<img width="1699" height="664" alt="image" src="https://github.com/user-attachments/assets/ba01acc9-2c32-4fbf-9ae6-cde7db69d120" />
+
+<br>
+
+Spark consists of master node and executor nodes. In a production environment, where Spark lives in remote servers as clusters.
+
+### A. Master nodes
+master nodes do the following:
+1. Create a Python worker process for PySpark
+2. Create a JVM process for running the Spark driver process.
+3. Py4J tunnel for communicating between Python and JVM
+
+Within the master node, we have a driver that do the following:
+1. Execution plan, Partitioning strategy, trigger jobs, allocate partitions and code to tasks and monitor the progress
+2. Collect and distribute any broadcast data
+3. Collect data at the driver caused by collect() or take() actions
+
+Generally, data engineers adopt the practice of providing 2 CPU cores. If multithreading is required, then data engineers will the amount of cores needed for the job. For the memory, it is agreeable among many data engineers that each core will have at least 2 GB or RAM. The memory is then divided equally for data processing as well as data collecting, making the overall driver memory equivalent to 1 GB per each core. With this setup, the overall overhead memory for spark driver will be 400 MB (search the resource allocation in browser for more details). Sometimes you will receive 'overhead memory exceeded' error due to heavy data collection in the driver. Therefore, to be save, we will allocate 1 GB memory overhead to the project.
+
+> spark.driver.cores = 2
+
+> spark.driver.memory = 4 GB
+
+> spark.driver.memory.overHead = 1 GB
+
+### B. Executor nodes
+
+Executor nodes do the heavy lifting work, reading the dataframe, transform, sort, shuffle or even partition of the data. As a starter, we will allocate 5 cores for each executor nodes. This will led to 10 GB of RAM. But you should also understand how Spark will use this 10 GB. Spark will take out 300MB for running the executor process itself. That's called reserved memory, which is fixed at 300MB per executor. Then you will give only 60% of the remaining for the executors. So you have only 5820 MB for the 5 cores to do data processing work. But 50% of this memory can be taken up by data caching. So you are left with 2910 MB for 5 CPU cores. So end of the day, you will have 582 MB per core. General thumb rule, we should provision our data partition, X. If you X number of partitions, then memory allocation should be 4X.
+
+Let's assume that the data partition size is 128 MB. So 4X of 128 MB comes to 512MB. That fits in 582 MB per core. The spark.executor.memoryOverhead is also allocated the same as in the driver, 1 GB.
+
+> spark.executor.cores = 5
+
+> spark.executor.memory = 10G
+
+> spark.executor.memoryOverhead = 1G
+
+### C. Number of executors
+
+Generally, number of executors are depends on data volume and the number of partitions that we have during the data processing and transformations. Assume that we have 10 partitions and we already have 5 cores for each executor. To run the job in parallel, having 2 executors are logical in this scenario. But it is not that easy to know the partition count. To tell how many partitions or how big is the data volume, the easiest method is to run your application in a QA environment and capture these details. We can monitor this in the execution plan. Refer to below visualisation:
+
+
+<img width="1729" height="899" alt="image" src="https://github.com/user-attachments/assets/c6c5f3df-4a44-4d44-846c-d115b1f3f151" />
+
+The upper measurements are actual calculation based on the execution plan. The lower measurements are the planned execution based on 800 shuffle partitions.
+
+<br>
+We configured the Spark memory to get 500 MB for each core. We also have 500 MB for data caching but we don't do data caching in this project so the actual capacity is 1GB per core. We have 800+400+480 = 1680 partitions for the first three stages. If we have 1680 cores, we can run the first three stages in parallel. When we reach stage 4, we will require only 800 cores because we have only 800 partitions. However, it is resource redundant if we allocate 1680 cores since it is for the first three stages and stage 4 and 5 only require 800 partitions. Thefore, we will implement 800 shuffle partitions which is equivalent to 800 cores. The executor comes with 5 CPU cores. So, to achieve maximum parallelism, the best is to get 160 executors.
+<br><br>
+
+> spark.executor.instances = 160
 
 <br><br><br><br>
 _License: Distributed under the MIT License. See [LICENSE](https://opensource.org/license/mit) for more information._
