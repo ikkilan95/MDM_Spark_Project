@@ -280,6 +280,9 @@ Data ingested from source was then transformed into a complex JSON key value pai
 }
 ```
 
+<br><br><br><br>
+_License: Distributed under the MIT License. See [LICENSE](https://opensource.org/license/mit) for more information._
+_Follow me on LinkedIn: https://www.linkedin.com/in/mohdnuriqhwan/_
 
 
 
