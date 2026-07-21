@@ -168,6 +168,10 @@ pipeline {
 #### Password And Credentials
 This project requires connection to the source (MDM hosted in S3 with the integration of Apache HIVE) and also the target destination (Confluent Kafka). In common cases where ETL decelopment are done in company-managed environment, data engineers are provided with pre-defined scripts that are already built in the project repositories (depending on the company size). You are rarely to develop your own config files from scratch. To mimic real working scenarios, this project requires building config files and store the credentials on a separate file where it will be passed automatically during the reading of the environment, programmatic fetching at runtime or native integration with orchestrators & park (i.e. Databricks or native Apache Spark config). Locally, the credentials are stored in .env where it will be included in .gitignore.
 
+# Input & Ouput 
+
+### A. Input format
+The MDM is stored in Amazon S3 where HIVE is integrated to create the metadata. Thus, Spark able to read the 
 
 
 
