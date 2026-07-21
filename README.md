@@ -1,9 +1,8 @@
 # PySpark: Transforming Data From Hive Distributed Warehouse To Kafka Events Format
-### Difficulty: ⭐⭐⭐⭐
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![Apache Spark](https://img.shields.io/badge/Apache%20Spark-FDEE21?style=for-the-badge&logo=apachespark&logoColor=black) ![Apache Kafka](https://img.shields.io/badge/Apache%20Kafka-000?style=for-the-badge&logo=apachekafka) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
 
-Welcome to the PySpark: Data Transformation project repository. This project covers end-to-end ETL processes; ingesting data from a source, tranforming via Apache Spark and load to target destination and optimizing Spark compute requirements based on size of data being process. Designed as a portfolio project, it highlights production-grade best practices in data engineering field.
+Welcome to the PySpark: Data Transformation project repository. This project covers end-to-end ETL processes; ingesting data from a source, tranforming via Apache Spark and load to target destination and optimizing Spark compute requirements based on size of data being process. Designed as a portfolio project, it highlights production-grade best practices in data engineering field. 
 
 ## 📌 Project Overview
 this project focuses on:
@@ -34,7 +33,7 @@ The reason behind the decision is as follow:
 7. Additinally, the legacy workflow also requires expertise in tweaking and adjusting the custom APIs if there is any changes of data structures or schemas from the MDM platform. This led to complexity in tracking the changes as well as ensuring readability of the scripts.
 
 ### C. Desired Output
-<img width="3184" height="1344" alt="Kafka connection" src="https://github.com/user-attachments/assets/31e033a8-89b3-46d2-93f8-85ada4858194" />
+<img width="3184" height="1344" alt="desired output" src="https://github.com/user-attachments/assets/b09f2532-c65b-47f9-869d-bb26da9d43fb" />
 <br><br>
 
 1. New connection pipeline that leverage Confluent Kafka as a bridge to move data from MDM to downstream systems.
@@ -50,9 +49,21 @@ The reason behind the decision is as follow:
 6. Estimate and optimize Spark computation requirements.
 
 ## Project Requirements and Resources
-#### **1. [Project Milestone & Guidelines](https://app.notion.com/p/PySpark-Transforming-Data-From-Hive-Distributed-Warehouse-To-Kafka-Events-Format-39a7d7cd41a6809eae92e3886cdb6754?source=copy_link)** - A comprehensive checkpoint in a project timeline that marks a major event, phase completion, or key deliverables.
 
-#### 2. Project File Structure - Modular code separation isolating ETL operations, business logic, session management, and configuration loading.
+### Stack
+1. Apache Spark - Installed in machine
+2. Java - Installed in machine (compatible with the Spark version)
+3. Python - Installde in machine (compatible with the Spark version)
+4. Confluent Kafka - As an endpoint / sink destination
+5. Amazon S3 - Storage
+6. Apache HIVE OR AWS Glue Catalog - For metadata creation
+
+#### [Project Milestone & Guidelines](https://app.notion.com/p/PySpark-Transforming-Data-From-Hive-Distributed-Warehouse-To-Kafka-Events-Format-39a7d7cd41a6809eae92e3886cdb6754?source=copy_link)
+A comprehensive checkpoint in a project timeline that marks a major event, phase completion, or key deliverables.
+<br><br>
+
+#### Project File Structure 
+Modular code separation isolating ETL operations, business logic, session management, and configuration loading.
 ```bash
 MDM_Spark_Project/
 ├── conf/
@@ -94,5 +105,104 @@ MDM_Spark_Project/
 # test_data/: Sample inputs and output schemas for automated local testing and PyTest validation ('test pytest_sbdl.py').
 # sbdl submit.sh & Jenkinsfile: Shell script and CI/CD pipeline definitions for automated deployment and cluster execution via spark-submit`.
 ```
+<br>
 
-### 3. 
+### Version Control
+This project requires to build branches of repository layers to mimicks the actual working scenarios where data engineers work solely in their respective development-stage repo. Data engineers are expected to run unit testing locally before requesting a merge to the development stage. In real working scenarios, we can expect to have CI/CD automation which will auto merge the project repo to the next level of branches without needing to have human intervention.
+The branch is as follow:
+
+```bash
+                          master
+                            ^
+                            |
+                         release
+                            ^
+                            |
+                       development
+                            ^
+                            |
+                     feature-changes 
+```
+<br>
+
+### Automated CI/CD
+In real working scenarios, DevOps implement automated CI/CD by adopting automation tools such as Jenkins, GitHub Actions or GitLab CI/CD. Data engineers do not build this automation tools. Instead, data engineers will somehow tweak the automation scripts depending on the requirements or applications that they build. In most times, DevOps develop the script to align with the desired outcomes or testing results and data engineers must ensure that their files, folders and scripts align with the pre-defined Jenkinsfile script. This project assumes that Jenkins is used as the CI/CD automation tool and therefore the creation of Jenkinsfile.
+
+```bash
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                sh 'pipenv --python python3 sync'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'pipenv run pytest'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                // This packages your local files into a zip archive on your machine
+                sh 'zip -r sbdl.zip lib'
+            }
+        }
+
+        stage('Local Simulate Deploy') {
+            steps {
+                // Simulates a deployment locally by printing a success message
+                echo "Build completed successfully! Package 'sbdl.zip' is ready in the workspace."
+            }
+        }
+    }
+}
+```
+<br>
+
+### Password And Credentials
+This project requires connection to the source (MDM hosted in S3 with the integration of Apache HIVE) and also the target destination (Confluent Kafka). In common cases where ETL decelopment are done in company-managed environment, data engineers are provided with pre-defined scripts that are already built in the project repositories (depending on the company size). You are rarely to develop your own config files from scratch. To mimic real working scenarios, this project requires building config files and store the credentials on a separate file where it will be passed automatically during the reading of the environment, programmatic fetching at runtime or native integration with orchestrators & park (i.e. Databricks or native Apache Spark config). Locally, the credentials are stored in .env where it will be included in .gitignore.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
